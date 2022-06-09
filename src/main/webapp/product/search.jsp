@@ -6,6 +6,7 @@
 </head>
 <body>
 <h1>Products</h1>
+<p><a href="/products">Back to list products</a></p>
 <form action="/SearchServlet"method="post">
     <input type="text" name="name" placeholder="Input product's name you want search">
     <input type="submit" value="search">

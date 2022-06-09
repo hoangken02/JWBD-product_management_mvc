@@ -9,6 +9,7 @@ import java.util.Map;
 
 public class ProductServiceImpl implements ProductService{
     private static Map<Integer,Product> products;
+    private static List<Product> listSearch = new ArrayList<>();
     static {
         products = new HashMap<>();
         products.put(1,new Product(1,"ball02",1200));
@@ -18,6 +19,7 @@ public class ProductServiceImpl implements ProductService{
         products.put(5,new Product(5,"ball4",1200));
     }
     @Override
+
     public List<Product> findAll() {
         return new ArrayList<>(products.values());
     }
@@ -31,6 +33,23 @@ public class ProductServiceImpl implements ProductService{
     public Product findById(int id) {
         return products.get(id);
     }
+
+    @Override
+    public List<Product> SearchByName(String name) {
+        listSearch.clear();
+        for (Map.Entry<Integer, Product> entry : products.entrySet()) {
+            if (entry.getValue().getName().equals(name)){
+                listSearch.add(entry.getValue());
+            }
+        }
+        if (listSearch!=null){
+            return listSearch;
+        }else {
+            return null;
+        }
+
+    }
+
 
     @Override
     public void update(int id, Product customer) {

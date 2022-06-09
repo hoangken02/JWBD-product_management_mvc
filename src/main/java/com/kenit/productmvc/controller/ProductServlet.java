@@ -1,6 +1,5 @@
 package com.kenit.productmvc.controller;
 
-import com.ibm.cuda.CudaStream;
 import com.kenit.productmvc.model.Product;
 import com.kenit.productmvc.service.ProductServiceImpl;
 
@@ -31,9 +30,31 @@ public class ProductServlet extends HttpServlet {
             case "delete":
                 showDeleteForm(request, response);
                 break;
+            case "view":
+                showInformationProduct(request,response);
+                break;
             default:
                 showListProduct(request, response);
                 break;
+        }
+    }
+
+    private void showInformationProduct(HttpServletRequest request, HttpServletResponse response) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        Product product = productService.findById(id);
+        RequestDispatcher requestDispatcher;
+        if (product!= null){
+            request.setAttribute("product",product);
+            requestDispatcher = request.getRequestDispatcher("product/view.jsp");
+        }else {
+            requestDispatcher = request.getRequestDispatcher("error-404.jsp");
+        }
+        try {
+            requestDispatcher.forward(request,response);
+        } catch (ServletException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -42,13 +63,13 @@ public class ProductServlet extends HttpServlet {
         Product product = productService.findById(id);
         RequestDispatcher requestDispatcher;
         if (product != null) {
-            request.setAttribute("product",product);
+            request.setAttribute("product", product);
             requestDispatcher = request.getRequestDispatcher("product/delete.jsp");
-        }else {
+        } else {
             requestDispatcher = request.getRequestDispatcher("error-404.jsp");
         }
         try {
-            requestDispatcher.forward(request,response);
+            requestDispatcher.forward(request, response);
         } catch (ServletException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -114,7 +135,7 @@ public class ProductServlet extends HttpServlet {
                 editProduct(request, response);
                 break;
             case "delete":
-                deleteProduct(request,response);
+                deleteProduct(request, response);
                 break;
             default:
                 break;
@@ -125,14 +146,14 @@ public class ProductServlet extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         Product product = productService.findById(id);
         RequestDispatcher requestDispatcher;
-        if (product!= null){
+        if (product != null) {
             productService.remove(id);
             try {
                 response.sendRedirect("/products");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        }else {
+        } else {
             requestDispatcher = request.getRequestDispatcher("error-404.jsp");
         }
     }
